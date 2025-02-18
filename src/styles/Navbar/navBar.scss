@@ -1,0 +1,53 @@
+
+.top-nav {
+    td {
+      border: 2px solid #444;
+    }
+    .nav-item {
+      display: flex;
+      justify-content: center;
+      text-transform: lowercase;
+      padding: 10px 20px;
+      span {
+        color: #5f5f5f;
+        margin-left: 2px;
+      }
+      &:hover {
+        background-color: #a36033;
+        cursor: url("../assets/pointer.png"), pointer;
+      }
+      &.active {
+        a {
+          color: #000;
+        }
+        color: #000;
+        background-color: #ff6600;
+        span {
+          color: #000;
+        }
+      }
+    }
+    a {
+        color: #ddd;
+        text-decoration: none;
+        padding: 5px 20px;
+        transition: 0.2s;
+    }
+  
+  }
+  
+.shortcut {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .shortcut span {
+    display: inline-block;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  
+  

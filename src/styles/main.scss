@@ -1,0 +1,89 @@
+@font-face {
+	src: url('../assets/VCR_OSD_MONO_1.001.ttf');
+	font-family: 'OSD';
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+body, #root {
+  display: flex;
+	overflow: hidden;
+	height: 100vh;
+	width: 100vw;
+  font-family: 'OSD';
+  font-size: 1em;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0d;
+  color: #ddd;
+}
+
+.crt::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+.crt::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);    
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+  
+
+body {
+    cursor: url("../assets/cursor.png"), auto;
+}
+  
+a, button {
+    cursor: url("../assets/pointer.png"), pointer;
+}
+
+input, textarea {
+    cursor: url("../assets/cursor.png"), text;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  overflow: hidden;
+}
+
+
+.monitor {
+  width: 800px;
+  height: 500px;
+  background: #1a1a1a;
+  border: 4px solid #444;
+  padding: 30px 60px 10px 60px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: space-between;
+}

@@ -1,0 +1,49 @@
+
+.tab-container {
+    .map-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      #map {
+        margin-top: 16px;
+        max-width: 80%;
+      }
+     
+      .pin-container {
+        position: absolute;
+        .pin {
+          width: 40px;
+        }
+        &.selected, &:hover {
+          cursor: url("../assets/pointer.png"), pointer;
+          animation: jump 0.8s steps(2, start) infinite;
+          @keyframes jump {
+            0%, 100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(-3px);
+            }
+          }
+        }
+        .sub-menu {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          background-color: #1a1a1aaa;
+          width: 200px;
+          height: 80px;
+          border: 2px solid #5f5f5f;
+        }
+      }
+    }
+  }
+
+  
+.label {
+    color: #ff6600;
+  }
+  
+    

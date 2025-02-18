@@ -1,0 +1,65 @@
+
+  .cmd-line td {
+    padding-top: 8px;
+    .user-name, .host-name {
+      color: #00ff00
+    }
+    .blinking-cursor:after {
+      margin-left: 10px;
+      content: "";
+      width: 8px;
+      height: 13px;
+      display: inline-block;
+      background-color: #ff6600;
+      animation: blink 0.8s steps(2, start) infinite;
+      @keyframes blink {
+        0% {
+          display: inline-block;
+        }
+        50% {
+          display: inline;
+        }
+        0% {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  .cmd-item{
+    padding-top: 8px;
+    .cmd-text{
+      padding-left: 10px;
+    }
+    &.selected .cmd-text{
+      text-decoration: underline;
+    }
+  }
+  
+  
+.about-container {
+    display: flex;
+    .ascii-art pre {
+      color: #2b1f17;
+    }
+    .info {
+      padding-left: 20px;
+      vertical-align: top;
+      text-wrap: wrap;
+      .hostname {
+        font-size: 20px;
+      }
+      .label {
+        color: #ff6600;
+      }
+    }
+  }
+  
+.dash-line::after {
+    content: "\0020";
+    display: block;
+    min-height: 0.4rem;
+    border-top: 2px dashed;
+    overflow: hidden;
+    margin-top: 0.4rem;
+  }
+  
