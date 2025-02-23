@@ -1,9 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import { termContext } from "../Tabs/Terminal";
+import { useState, useEffect } from "react";
 
 
 const BonsaiTree = () => {
-    const { clearHistory } = useContext(termContext);
     const life = 32;
     const rows = 25;
     const cols = 100;
@@ -155,24 +153,23 @@ const BonsaiTree = () => {
         return Math.floor(Math.random() * mod);
     }
         
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const chooseColor = (type: number) => {
-        switch(type) {
-            case branchType.trunk:
-            case branchType.shootLeft:
-            case branchType.shootRight:
-                if (roll(2) === 0) return {color: "#0000FF", bold: true};
-                else return {color: "#000000", bold: false};
-            case branchType.dying:
-                if (roll(10) === 0) return {color: "#FF0000", bold: true};
-                else return {color: "#000000", bold: false};
-            case branchType.dead:
-                if (roll(3) === 0) return {color: "#FF0000", bold: true};
-                else return {color: "#000000", bold: false};
-            default:
-                return {color: "#000000", bold: false};
-        }
-    }
+    // const chooseColor = (type: number) => {
+    //     switch(type) {
+    //         case branchType.trunk:
+    //         case branchType.shootLeft:
+    //         case branchType.shootRight:
+    //             if (roll(2) === 0) return {color: "#0000FF", bold: true};
+    //             else return {color: "#000000", bold: false};
+    //         case branchType.dying:
+    //             if (roll(10) === 0) return {color: "#FF0000", bold: true};
+    //             else return {color: "#000000", bold: false};
+    //         case branchType.dead:
+    //             if (roll(3) === 0) return {color: "#FF0000", bold: true};
+    //             else return {color: "#000000", bold: false};
+    //         default:
+    //             return {color: "#000000", bold: false};
+    //     }
+    // }
 
     const branch = async (posX: number, posY: number, life: number, type: number) => {
         let dx = 0;
