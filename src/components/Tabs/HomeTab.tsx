@@ -2,91 +2,11 @@ import { useEffect, useState } from "react";
 import "../../styles/Navbar/homeTab.scss";
 import { maxColSpan } from "../../constants/navbar";
 import trainAscii from "../../assets/train.txt";
+import BonsaiTree from "../Command/CBonsai";
+import NeoFetch from "../Command/Neofetch";
 
 const commands = ["neofetch", "whoami", "sl", "fortune", "cmatrix", "cbonsai"];
 
-function NeoFetch() {
-  return (
-    <tr className="cmd-line">
-      <td colSpan={maxColSpan}>
-        <div className="about-container">
-          <pre className="ascii-art">
-            {`⣇⣿⠘⣿⣿⣿⡿⡿⣟⣟⢟⢟⢝⠵⡝⣿⡿⢂⣼⣿⣷⣌⠩⡫⡻⣝⠹⢿⣿⣷
-⡆⣿⣆⠱⣝⡵⣝⢅⠙⣿⢕⢕⢕⢕⢝⣥⢒⠅⣿⣿⣿⡿⣳⣌⠪⡪⣡⢑⢝⣇
-⡆⣿⣿⣦⠹⣳⣳⣕⢅⠈⢗⢕⢕⢕⢕⢕⢈⢆⠟⠋⠉⠁⠉⠉⠁⠈⠼⢐⢕⢽
-⡗⢰⣶⣶⣦⣝⢝⢕⢕⠅⡆⢕⢕⢕⢕⢕⣴⠏⣠⡶⠛⡉⡉⡛⢶⣦⡀⠐⣕⢕
-⡝⡄⢻⢟⣿⣿⣷⣕⣕⣅⣿⣔⣕⣵⣵⣿⣿⢠⣿⢠⣮⡈⣌⠨⠅⠹⣷⡀⢱⢕
-⡝⡵⠟⠈⢀⣀⣀⡀⠉⢿⣿⣿⣿⣿⣿⣿⣿⣼⣿⢈⡋⠴⢿⡟⣡⡇⣿⡇⡀⢕
-⡝⠁⣠⣾⠟⡉⡉⡉⠻⣦⣻⣿⣿⣿⣿⣿⣿⣿⣿⣧⠸⣿⣦⣥⣿⡇⡿⣰⢗⢄
-⠁⢰⣿⡏⣴⣌⠈⣌⠡⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣬⣉⣉⣁⣄⢖⢕⢕⢕
-⡀⢻⣿⡇⢙⠁⠴⢿⡟⣡⡆⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣵⣵⣿
-⡻⣄⣻⣿⣌⠘⢿⣷⣥⣿⠇⣿⣿⣿⣿⣿⣿⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣷⢄⠻⣿⣟⠿⠦⠍⠉⣡⣾⣿⣿⣿⣿⣿⣿⢸⣿⣦⠙⣿⣿⣿⣿⣿⣿⣿⣿⠟
-⡕⡑⣑⣈⣻⢗⢟⢞⢝⣻⣿⣿⣿⣿⣿⣿⣿⠸⣿⠿⠃⣿⣿⣿⣿⣿⣿⡿⠁⣠
-⡝⡵⡈⢟⢕⢕⢕⢕⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⠿⠋⣀⣈⠙
-⡝⡵⡕⡀⠑⠳⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⢉⡠⡲⡫⡪⡪⡣ `}
-          </pre>
-          <div className="info">
-            <p className="hostname">
-              <span className="label"></span> yuugen@terminal
-            </p>
-            <p className="dash-line"></p>
-            <p>
-              <span className="label">UserName:</span> Nguyen Duc Phuong Nguyen
-            </p>
-            <p>
-              <span className="label">Gender:</span> Male
-            </p>
-            <p>
-              <span className="label">Birthday:</span> Jan 23th, 2001
-            </p>
-            <p>
-              <span className="label">Role:</span> Full-stack Web Developer
-            </p>
-            <p>
-              <span className="label">Education:</span> Computer Science Degree,
-              UIT HCM
-            </p>
-            <p>
-              <span className="label">Location:</span> Ho Chi Minh, VietNam
-            </p>
-            <p>
-              <span className="label">Programing Language:</span> HTML, CSS,
-              JavaScript, Python, C++, C#{" "}
-            </p>
-            <p>
-              <span className="label">Framework/Platform:</span> ReactJS,
-              NodeJS, ASP.NET, Jquery, Shopify Liquid, Sass
-            </p>
-            <p>
-              <span className="label">Database:</span> MS SQL Server, MongoDB,
-              SQLite{" "}
-            </p>
-            <p>
-              <span className="label">Dev tools:</span> Git, Jira, Figma,
-              Postman{" "}
-            </p>
-          </div>
-        </div>
-      </td>
-    </tr>
-  );
-}
-
-function WhoAmI() {
-  return (
-    <tr className="cmd-line">
-      <td colSpan={maxColSpan}>
-        <div>
-          I am a highly motivated and hard-working person with a great passion
-          for technology. I enjoy spending time learning new technologies. My
-          goal is to become a software engineering, specifically in web
-          development
-        </div>
-      </td>
-    </tr>
-  );
-}
 
 function SLTrain({ onComplete }: { onComplete: () => void }) {
   const [train, setTrain] = useState<string>("");
@@ -149,8 +69,7 @@ export default function HomeTab() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (showCmdOutput && commands[selectedCmdIndex] == "sl")
-        return
+      if (showCmdOutput && commands[selectedCmdIndex] == "sl") return;
       if (event.key === "ArrowUp") {
         setSelectedCmdIndex((prevIndex) =>
           prevIndex > 0 ? prevIndex - 1 : commands.length - 1
@@ -185,7 +104,6 @@ export default function HomeTab() {
             </td>
           </tr>
           {commands[selectedCmdIndex] == "neofetch" && <NeoFetch />}
-          {commands[selectedCmdIndex] == "whoami" && <WhoAmI />}
           {commands[selectedCmdIndex] == "sl" && (
             <SLTrain
               onComplete={() => {
@@ -193,6 +111,13 @@ export default function HomeTab() {
                 setSelectedCmdIndex(0);
               }}
             />
+          )}
+          {commands[selectedCmdIndex] == "cbonsai" && (
+            <tr>
+              <td colSpan={maxColSpan}>
+                <BonsaiTree />
+              </td>
+            </tr>
           )}
         </>
       )}

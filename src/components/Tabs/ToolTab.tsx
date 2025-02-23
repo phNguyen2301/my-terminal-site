@@ -1,6 +1,5 @@
 import "../../styles/Navbar/toolTab.scss";
 import React, { useState, useEffect } from "react";
-import { maxColSpan } from "../../constants/navbar";
 import { apps } from "../../constants/tool";
 import { useTabStore } from "../../stores/appStore";
 
@@ -37,8 +36,8 @@ export default function ToolTab() {
           }
         </>
       ) : (
-        <tr>
-          <td className="left-menu">
+        <div style={{display: "flex"}}>
+          <div className="left-menu">
             <h3 className="menu-txt">~ TOOLS ~</h3>
             <ul>
               {apps.map((app, index: number) => (
@@ -57,11 +56,11 @@ export default function ToolTab() {
                 <div className="menu-txt">...</div>
               </li>
             </ul>
-          </td>
-          <td className="app-display" colSpan={maxColSpan - 1}>
+          </div>
+          <div className="app-display" style={{flex: 7}}>
             <p>{apps[selectedIndex].desc}</p>
-          </td>
-        </tr>
+          </div>
+        </div>
       )}
     </>
   );

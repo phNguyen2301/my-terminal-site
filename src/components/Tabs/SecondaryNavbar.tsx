@@ -16,18 +16,16 @@ export default function SecondaryNavbar({title}: {title: string}) {
     
   return (
     <>
-      <tr className="top-nav">
-        <td>
+        <div>
             <div className="nav-item" onClick={() => setActiveNavBar("main")}>
                 ← ESC 
             </div>
-        </td>
-        <td colSpan={7}>
+        </div>
+        <div style={{flex: 8}}>
             <div className="nav-item active">
             {title}
             </div>
-        </td>
-      </tr>
+        </div>
     </>
   );
 }

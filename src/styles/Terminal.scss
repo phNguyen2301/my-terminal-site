@@ -1,0 +1,127 @@
+
+.terminal_Wrapper {
+  padding-top: 0.75rem;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+.terminal_CmdNotFound {
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.terminal_Empty {
+  margin-bottom: 0.25rem;
+}
+
+.terminal_MobileSpan {
+  line-height: 1.5rem;
+  margin-right: 0.75rem;
+
+  @media (min-width: 550px) {
+    display: none;
+  }
+}
+
+.terminal_MobileBr {
+  @media (min-width: 550px) {
+    display: none;
+  }
+}
+
+.terminal_Form {
+  @media (min-width: 550px) {
+    display: flex;
+  }
+}
+
+.terminal_Input {
+  flex-grow: 1;
+
+  @media (max-width: 550px) {
+    min-width: 85%;
+  }
+}
+
+.terminal_Hints {
+  margin-right: 0.875rem;
+}
+
+
+*, ::before, ::after {
+  border-width: 0;
+  border-style: solid;
+  // border-color: theme('borderColor.DEFAULT', currentColor);
+}
+// body {
+//   font-family: 'IBM Plex Mono', monospace;
+//   font-weight: 500;
+//   background-color: ${({ theme }) => theme.colors?.body};
+//   color: ${({ theme }) => theme.colors?.text[100]};
+// }
+
+// /* Track */
+// ::-webkit-scrollbar-track {
+//   background: ${({ theme }) => theme.colors?.body};
+// }
+// /* Handle */
+// ::-webkit-scrollbar-thumb {
+//   background: ${({ theme }) => theme.colors?.scrollHandle};
+// }
+// /* Handle on hover */
+// ::-webkit-scrollbar-thumb:hover {
+//   background: ${({ theme }) => theme.colors?.scrollHandleHover};
+// }
+
+// input[type=text] {
+//   background-color: ${({ theme }) => theme.colors?.body};
+//   color: ${({ theme }) => theme.colors?.text[100]};
+//   caret-color: ${({ theme }) => theme.colors?.primary};
+// }
+input {
+  background-color: #1a1a1a;
+  outline: none;
+}
+input {
+  word-break: break-all;
+  outline: none;
+  visibility: visible;
+}
+.user-name, .host-name {
+  color: #00ff00
+}
+
+
+.terminal_info_Wrapper {
+  display: inline-block;
+  margin-right: 0.75rem;
+};
+
+.about-container {
+  display: flex;
+  .ascii-art pre {
+    color: #2b1f17;
+  }
+  .info {
+    padding-left: 20px;
+    vertical-align: top;
+    text-wrap: wrap;
+    .hostname {
+      font-size: 20px;
+    }
+    .label {
+      color: #ff6600;
+    }
+  }
+}
+
+.dash-line::after {
+  content: "\0020";
+  display: block;
+  min-height: 0.4rem;
+  border-top: 2px dashed;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}

@@ -1,11 +1,11 @@
-import ContactTab from "../components/Navbar/ContactTab";
-import SettingTab from "../components/Navbar/SettingTab";
-import HomeTab from "../components/Navbar/HomeTab";
-import ToolTab from "../components/Navbar/ToolTab";
+import ContactTab from "../components/Tabs/ContactTab";
+import SettingTab from "../components/Tabs/SettingTab";
+import ToolTab from "../components/Tabs/ToolTab";
 import { NavItemType } from "../types/navItemTypes";
+import Terminal from "../components/Tabs/Terminal";
 
 export const mainNavItems: NavItemType[] = [
-  { name: "home", element: HomeTab },
+  { name: "home", element: Terminal },
   { name: "tools", element: ToolTab },
   { name: "contacts", element: ContactTab },
   { name: "settings", element: SettingTab },

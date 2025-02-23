@@ -2,11 +2,16 @@ import "../../styles/Navbar/contactTab.scss"
 import map from "../../assets/map.png";
 import pin from "../../assets/pin.png";
 import {useEffect, useState} from "react"
-import { maxColSpan } from "../../constants/navbar";
 import { contacts } from "../../constants/contact";
 import { ContactType } from "../../types/contactType";
+import React from "react";
 
-function SubMenu({contact} : {contact: ContactType} ) {
+type SubMenuProps = {
+  contact: ContactType
+
+}
+
+const SubMenu: React.FC<SubMenuProps> = ({contact}) => {
   const offsetRight = contact.subMenuPos === "left" ? 60 : -220;
   return <div className="sub-menu" 
   style={{top: -18,
@@ -15,7 +20,14 @@ function SubMenu({contact} : {contact: ContactType} ) {
 
   </div>
 }
-function PinEl({contact, isActive, onClickFn} : {contact: ContactType, isActive: boolean, onClickFn: () => void}) {
+
+type PinElProps = {
+  contact: ContactType;
+  isActive: boolean;
+  onClickFn: () => void;
+};
+
+const PinEl: React.FC<PinElProps> = ({contact, isActive, onClickFn}) =>  {
   return (
     <div className={`pin-container ${isActive ? "selected" : ""}`} style={{top: contact.offsetTop, left: contact.offsetLeft}} onClick={onClickFn}>
       <img src={pin} alt="Pin" className="pin"/>
@@ -47,8 +59,6 @@ export default function ContactTab() {
 
 
   return (
-      <tr>
-        <td colSpan={maxColSpan}>
           <div className="tab-container">
             <div className="map-container">
               {contacts.map((c, index)=> { return (
@@ -59,7 +69,5 @@ export default function ContactTab() {
               <img id="map" src={map} alt="Treasure Map" />
             </div>
           </div>
-        </td>
-      </tr>
   );
 }

@@ -1,9 +1,11 @@
 
 .top-nav {
-    td {
-      border: 2px solid #444;
-    }
+    display: flex;
+    width: 100%;
     .nav-item {
+      flex: 25%;
+      border: 2px solid #444;
+      margin: 0 -1px;
       display: flex;
       justify-content: center;
       text-transform: lowercase;
