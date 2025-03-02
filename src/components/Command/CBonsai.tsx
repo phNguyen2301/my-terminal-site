@@ -1,14 +1,34 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-
-const BonsaiTree = () => {
+const BonsaiTree: React.FC = () => {
     const life = 32;
-    const rows = 25;
-    const cols = 100;
+    const rows = 24;
+    const cols = 50;
     const middle = Math.floor(cols / 2);
     const grid = new Array(rows).fill(0).map(() => new Array(cols).fill(" "));
-    const [currentFrame, setCurrentFrame] = useState<string[][]>([]);
+    const colorGrid = new Array(rows).fill(0).map(() => new Array(cols).fill({ color: "#fff", bold: false }));
+    // const [currentFrame, setCurrentFrame] = useState<string[][]>([]);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     let shootCounter = Math.floor(Math.random() * 10);
+
+    const colorPalet = {
+        "black": "#0C0C0C",
+        "red": "#C50F1F",
+        "green": "#13A10E",
+        "yellow": "#C19C00",
+        "blue": "#0037DA",
+        "purple": "#881798",
+        "cyan": "#3A96DD",
+        "white": "#CCCCCC",
+        "brightBlack": "#767676",
+        "brightRed": "#E74856",
+        "brightGreen": "#16C60C",
+        "brightYellow": "#F9F1A5",
+        "brightBlue": "#3B78FF",
+        "brightPurple": "#B4009E",
+        "brightCyan": "#61D6D6",
+        "brightWhite": "#F2F2F2"
+    }
 
     const branchType = {
         trunk: 0,
@@ -20,16 +40,27 @@ const BonsaiTree = () => {
 
     const drawbase = (posX: number, posY: number) => {
         const base = [
-            " ___________./~~~\\.___________",
-            " \\                           /",
-            "  \\_________________________/ ",
-            "  (_)                     (_)  ",
+            " :___________./~~~\\.___________:",
+            "  \\                           / ",
+            "   \\_________________________/  ",
+            "   (_)                     (_)   ",
         ]
         const baseWidth = base[0].length;
         const baseHeight = base.length;
         for (let i = 0; i < baseHeight; i++) {
             for (let j = 0; j < baseWidth; j++) {
-                grid[posY-baseHeight+i][posX-baseWidth/2+j] = base[i][j];
+                if (base[i][j] == " ") continue
+                const curPosY = posY-baseHeight+i
+                const curPosX = posX-baseWidth/2+j
+                let color = colorPalet.white;
+                 if (i === 0 && j > 12 && j < 20 ) {
+                    color = colorPalet.brightYellow
+                }
+                else if (i === 0 && j !== 1 && j !== baseWidth - 1){
+                    color = colorPalet.green
+                }
+                grid[curPosY][curPosX] = base[i][j];
+                colorGrid[curPosY][curPosX] = { color: color, bold: true };
             }
         }
     }
@@ -116,7 +147,7 @@ const BonsaiTree = () => {
         
     const chooseChar = (dx: number, dy: number, life: number, type: number) => {
         let char = "?";
-            if (life < 4) type = branchType.dying;
+        if (life < 4) type = branchType.dying;
 
         switch (type) {
             case branchType.trunk:
@@ -152,31 +183,59 @@ const BonsaiTree = () => {
     const roll = (mod: number) => {
         return Math.floor(Math.random() * mod);
     }
+
+    const chooseColor = (type: number) => {
+        switch(type) {
+            case branchType.trunk:
+            case branchType.shootLeft:
+            case branchType.shootRight:
+                if (roll(2) === 0) return {color: colorPalet.brightYellow, bold: true};
+                else return {color: colorPalet.brightYellow, bold: false};
+            case branchType.dying:
+                if (roll(10) === 0) return {color: colorPalet.brightYellow, bold: true};
+                else return {color: colorPalet.green, bold: false};
+            case branchType.dead:
+                if (roll(3) === 0) return {color: colorPalet.brightGreen, bold: true};
+                else return {color: colorPalet.brightGreen, bold: false};
+            default:
+                return {color: colorPalet.white, bold: false};
+        }
+    }
+
+    const renderToCanvas = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
         
-    // const chooseColor = (type: number) => {
-    //     switch(type) {
-    //         case branchType.trunk:
-    //         case branchType.shootLeft:
-    //         case branchType.shootRight:
-    //             if (roll(2) === 0) return {color: "#0000FF", bold: true};
-    //             else return {color: "#000000", bold: false};
-    //         case branchType.dying:
-    //             if (roll(10) === 0) return {color: "#FF0000", bold: true};
-    //             else return {color: "#000000", bold: false};
-    //         case branchType.dead:
-    //             if (roll(3) === 0) return {color: "#FF0000", bold: true};
-    //             else return {color: "#000000", bold: false};
-    //         default:
-    //             return {color: "#000000", bold: false};
-    //     }
-    // }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        const fontSize = 16;
+        const charWidth = 9;  
+        
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let y = 0; y < grid.length; y++) {
+            for (let x = 0; x < grid[y].length; x++) {
+                if (grid[y][x] !== " ") {
+                    const styleInfo = colorGrid[y][x];
+                    ctx.fillStyle = styleInfo?.color || '#fff';                   
+                    ctx.font = styleInfo?.bold ? `bold ${fontSize}px monospace` : `${fontSize}px monospace`;
+                    ctx.fillText(grid[y][x], x * charWidth, y * fontSize);
+                }
+            }
+        }
+    }
 
     const branch = async (posX: number, posY: number, life: number, type: number) => {
         let dx = 0;
         let dy = 0;
         let age = 0;
         const multiplier = 5;
-        const lifeStart = 32;
+        const lifeStart = 30;
         let shootCooldown = multiplier;
     
         while (life > 0) {
@@ -188,7 +247,7 @@ const BonsaiTree = () => {
     
             if (dy > 0 && posY > (rows - 8)) dy--;
     
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, 100));
     
             if (life < 3) {
                 branch(posX, posY, life, branchType.dead);
@@ -216,37 +275,47 @@ const BonsaiTree = () => {
             posX += dx;
             posY += dy;
             const char = chooseChar(dx, dy, life, type);
-            grid[posY][posX] = char;
-            
-            setCurrentFrame([...grid]);
+            if (char.length > 1) {
+                for (let i = 0; i < char.length; i++) {
+                    if (posX + i < cols) {
+                        grid[posY][posX+i] = char[i];
+                        colorGrid[posY][posX+i] = chooseColor(type);
+                    }
+                }
+            }
+            else{
+                grid[posY][posX] = char;
+                colorGrid[posY][posX] = chooseColor(type);
+            }
+            renderToCanvas();
         }
     };
 
-
     useEffect(() => {
-        // clearHistory?.();
+        if (canvasRef.current) {
+            const charWidth = 9;  
+            const lineHeight = 16; 
+            canvasRef.current.width = cols * charWidth;
+            canvasRef.current.height = rows * lineHeight;
+        }
+        
         const generateTree = async () => {
             drawbase(middle, rows);
             await branch(middle, rows - 5, life, branchType.trunk);
         };
-        
         generateTree();
     }, []);
 
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",}}>
-            <textarea 
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <canvas
+                ref={canvasRef}
                 style={{
-                     backgroundColor: "#1a1a1a"
+                    background: "#1a1a1a",
                 }}
-                cols={100} 
-                rows={25} 
-                value={currentFrame.map(row => row.join("")).join("\n")} 
-                readOnly 
-            />
+                />
         </div>
-    )
+    );
 }
 
 export default BonsaiTree;
-

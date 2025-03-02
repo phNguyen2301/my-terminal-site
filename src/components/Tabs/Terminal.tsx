@@ -1,63 +1,47 @@
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { argTab } from "../../utils/funcs";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../styles/Terminal.scss";
 import { commands } from "../../constants/command";
 import Output from "../Command/Output";
-
-
-type Term = {
-  arg: string[];
-  history: string[];
-  rerender: boolean;
-  index: number;
-  clearHistory?: () => void;
-};
-
-export const termContext = createContext<Term>({
-  arg: [],
-  history: [],
-  rerender: false,
-  index: 0,
-});
+import OutputFullScreen from "../Command/OutputFullScreen";
+import { useTerminalStore } from "../../stores/terminalStore";
+import { CommandHistoryType } from "../../types/commandType";
 
 const TerminalPrompt = () => {
   return (
     <div className="terminal_info_Wrapper">
-        <span className="user-name">yuugen</span>@<span className="host-name">terminal</span> ~ $
+      <span className="user-name">yuugen</span>@
+      <span className="host-name">terminal</span> ~ $
     </div>
-)
-}  
-   
+  );
+};
 
 const Terminal = () => {
   const containerRef = useRef(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [inputVal, setInputVal] = useState("");
-  const [cmdHistory, setCmdHistory] = useState<string[]>([]);
-  const [rerender, setRerender] = useState(false);
-  const [hints, setHints] = useState<string[]>([]);
+  const { cmdHistory, setCmdHistory, hints, setHints, isFullScreen, setIsFullScreen } =
+    useTerminalStore();
+
   const [pointer, setPointer] = useState(-1);
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setRerender(false);
-      setInputVal(e.target.value);
-    },
-    [inputVal]
-  );
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(e.target.value);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setCmdHistory([inputVal, ...cmdHistory]);
+    if (!inputVal) return;
+    const command = inputVal.split(" ");
+    const newCmdHistory: CommandHistoryType = {
+      cmd: command[0],
+      timestamp: new Date().toDateString(),
+    };
+    if (command[0] === "cbonsai") {
+      setIsFullScreen(true);
+    }
+    setCmdHistory([newCmdHistory, ...cmdHistory]);
     setInputVal("");
-    setRerender(true);
     setHints([]);
     setPointer(-1);
   };
@@ -80,24 +64,19 @@ const Terminal = () => {
 
   // Keyboard Press
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setRerender(false);
-    const ctrlI = e.ctrlKey && e.key.toLowerCase() === "i";
     const ctrlL = e.ctrlKey && e.key.toLowerCase() === "l";
 
     // if Tab or Ctrl + I
-    if (e.key === "Tab" || ctrlI) {
+    if (e.key === "Tab") {
       e.preventDefault();
       if (!inputVal) return;
 
       let hintsCmds: string[] = [];
       commands.forEach(({ cmd }) => {
-        if (cmd.startsWith(inputVal)) {
+        if (cmd.includes(inputVal)) {
           hintsCmds = [...hintsCmds, cmd];
         }
       });
-
-      const returnedHints = argTab(inputVal, setInputVal, setHints, hintsCmds);
-      hintsCmds = returnedHints ? [...hintsCmds, ...returnedHints] : hintsCmds;
 
       // if there are many command to autocomplete
       if (hintsCmds.length > 1) {
@@ -128,7 +107,7 @@ const Terminal = () => {
 
       if (pointer + 1 === cmdHistory.length) return;
 
-      setInputVal(cmdHistory[pointer + 1]);
+      setInputVal(cmdHistory[pointer + 1].cmd);
       setPointer((prevState) => prevState + 1);
       inputRef?.current?.blur();
     }
@@ -143,7 +122,7 @@ const Terminal = () => {
         return;
       }
 
-      setInputVal(cmdHistory[pointer - 1]);
+      setInputVal(cmdHistory[pointer - 1].cmd);
       setPointer((prevState) => prevState - 1);
       inputRef?.current?.blur();
     }
@@ -158,13 +137,17 @@ const Terminal = () => {
   }, [inputRef, inputVal, pointer]);
 
   return (
-        <div
-          data-testid="terminal-wrapper"
-          ref={containerRef}
-          className="terminal_Wrapper"
-        >
+    <div
+      data-testid="terminal-wrapper"
+      ref={containerRef}
+      className="terminal_Wrapper"
+    >
+      {isFullScreen ? (
+        <OutputFullScreen cmd={cmdHistory[0].cmd}/>
+      ) : (
+        <>
           {hints.length > 1 && (
-            <div style={{width: "100%", display: "flex"}}>
+            <div style={{ width: "100%", display: "flex" }}>
               {hints.map((hCmd) => (
                 <span className="terminal_Input" key={hCmd}>
                   {hCmd}
@@ -172,9 +155,10 @@ const Terminal = () => {
               ))}
             </div>
           )}
+
           <form onSubmit={handleSubmit} className="terminal_Form">
             <label htmlFor="terminal-input">
-              <TerminalPrompt /> 
+              <TerminalPrompt />
               <br className="terminal_MobileBr" />
               <span className="terminal_MobileSpan">&#62;</span>
             </label>
@@ -192,47 +176,35 @@ const Terminal = () => {
               value={inputVal}
               onKeyDown={handleKeyDown}
               onChange={handleChange}
-              />
+            />
           </form>
-
           {cmdHistory.map((cmdH, index) => {
-            const commandArray = cmdH.trim().split(" ");
-            const validCommand = commands.find(
-              (c) => c.cmd === commandArray[0]
-            );
-            const contextValue = {
-              arg: commandArray,
-              history: cmdHistory,
-              rerender,
-              index,
-              clearHistory,
-            };
+            const validCommand = commands.find((c) => c.cmd === cmdH.cmd);
+            const isDisplayOutput = validCommand && validCommand.isDisplayOuput;
             return (
               <div key={index}>
                 <div>
                   <TerminalPrompt />
                   <br className="terminal_MobileBr" />
                   <span className="terminal_MobileSpan">&#62;</span>
-                  <span data-testid="input-command">{cmdH}</span>
+                  <span data-testid="input-command">{cmdH.cmd}</span>
                 </div>
                 {validCommand ? (
-                  <termContext.Provider value={contextValue}>
-                    <Output index={index} cmd={commandArray[0]} />
-                  </termContext.Provider>
-                ) : cmdH === "" ? (
-                  <div className="terminal_Empty" />
+                  isDisplayOutput && <Output index={index} cmd={cmdH.cmd} />
                 ) : (
                   <div
                     data-testid={`not-found-${index}`}
                     className="terminal_CmdNotFound"
                   >
-                    command not found: {cmdH}
+                    command not found: {cmdH.cmd}
                   </div>
                 )}
               </div>
             );
           })}
-        </div>
+        </>
+      )}
+    </div>
   );
 };
 

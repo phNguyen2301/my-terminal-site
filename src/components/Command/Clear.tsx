@@ -1,10 +1,11 @@
-import { useContext, useEffect } from "react";
-import { termContext } from "../Tabs/Terminal";
+import {  useEffect } from "react";
+import { useTerminalStore } from "../../stores/terminalStore";
 
 const Clear: React.FC = () => {
-  const { clearHistory } = useContext(termContext);
+  const { setCmdHistory, setHints } = useTerminalStore()
   useEffect(() => {
-    clearHistory?.();
+    setCmdHistory([])
+    setHints([])
   }, []);
   return <></>;
 };

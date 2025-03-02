@@ -10,7 +10,7 @@
           </div>
         ))}
         <div>
-          <div>Tab or Ctrl + i&nbsp; =&gt; autocompletes the command</div>
+          <div>Tab =&gt; autocompletes the command</div>
           <div>Up Arrow =&gt; go back to previous command</div>
           <div>Ctrl + l =&gt; clear the terminal</div>
         </div>
